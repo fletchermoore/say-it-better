@@ -6,7 +6,13 @@ if (Meteor.isClient) {
 
   Template.body.helpers({
     texts: function () {
-      return Texts.find({});
+      return _.chain(Texts.find({}).fetch())
+      .pluck("text")
+      .map(Linkify.process)
+      .map(function (x) {
+        return { "text":x };
+      })
+      .value();
     }
   });
   
