@@ -1,17 +1,24 @@
+Texts = new Mongo.Collection("texts");
+
 if (Meteor.isClient) {
   // counter starts at 0
   Session.setDefault("counter", 0);
 
-  Template.hello.helpers({
-    counter: function () {
-      return Session.get("counter");
+  Template.body.helpers({
+    texts: function () {
+      return Texts.find({});
     }
   });
-
-  Template.hello.events({
-    'click button': function () {
-      // increment the counter when button is clicked
-      Session.set("counter", Session.get("counter") + 1);
+  
+  Template.body.events({
+    "submit #add-text-form": function(event) {
+      var text = event.target.addTextarea.value;
+      Texts.insert({
+        text: text,
+        createdAt: new Date()
+      });
+      event.target.addTextarea.value = "";
+      return false;
     }
   });
 }
