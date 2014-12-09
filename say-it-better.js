@@ -8,7 +8,7 @@ if (Meteor.isClient) {
     texts: function () {
       return _.chain(Texts.find({}).fetch())
       .pluck("text")
-      .map(Linkify.process)
+      .map(_.curry(Linkify.process)(Config.href))
       .map(function (x) {
         return { "text":x };
       })
