@@ -25,12 +25,21 @@ if (Meteor.isClient) {
       });
       event.target.addTextarea.value = "";
       return false;
+    },
+    
+    "click #emptyButton": function(event) {
+      Meteor.call("emptyTexts");
+      return false;
     }
   });
 }
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
-    // code to run on server at startup
+    return Meteor.methods({
+      emptyTexts: function() {
+        Texts.remove({});
+      }
+    });
   });
 }

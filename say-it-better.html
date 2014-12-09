@@ -3,29 +3,38 @@
 </head>
 
 <body>
-  <h1>Say-it-better!</h1>
-  
-  <h2>Add Text</h2>
-  
-  <form id="add-text-form">
-  <div>
-    <textarea name="addTextarea" placeholder="copy paste some spanish here"></textarea>
+  <div id="left-column">
+
+    <h1>Say-it-better!</h1>
+
+    <h2>Add Text</h2>
+
+    <form id="add-text-form">
+      <div>
+        <textarea name="addTextarea" placeholder="copy paste some spanish here"></textarea>
+      </div>
+      <div>
+        <input type="submit" name="submit-text" />
+      </div>
+    </form>
+
+    <h2>Texts</h2>
+    <div>
+      <button type="button" id="emptyButton">Empty</button>
     </div>
-    <div><input type="submit" name="submit-text"/></div>
-  </form>
-  
-  <h2>Texts</h2>
-  
-  {{#each texts}}
-    {{>text}}
-  {{/each}}
-  
-  
+
+    {{#each texts}} {{>text}} {{/each}}
+
+  </div>
+
+  <iframe id="dictionary"></iframe>
+
+
 </body>
 
 <!-- confusing names! -->
 <template name="text">
-  <div>
+  <div class="text-container">
     {{{text}}}
   </div>
 </template>
