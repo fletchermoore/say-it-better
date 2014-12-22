@@ -5,6 +5,14 @@
     height: 900px;
     position: fixed;
     right: 10px;
+    top: 150px;
+}
+
+#save-word-form-container {
+    width: 45%;
+    height: 200px;
+    position: fixed;
+    right: 10px;
     top: 20px;
 }
 

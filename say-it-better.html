@@ -24,7 +24,24 @@
     </div>
 
     {{#each texts}} {{>text}} {{/each}}
+    
+    <h2>Dictionary</h2>
+    <div>
+      <textarea id="dictTextarea">{{dict}}</textarea>
+    </div>
 
+  </div>
+  
+  <div id="save-word-form-container">
+    <form id="save-word-form">
+      <div><textarea name="frontTextarea" id="frontTextarea"></textarea></div>
+      
+      <div><textarea name="backTextarea"></textarea></div>
+      
+      <div><input type="submit" name="Add Card"></div>
+      
+    </form>
+    
   </div>
 
   <iframe id="dictionary"></iframe>

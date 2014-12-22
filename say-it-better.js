@@ -1,6 +1,9 @@
 Texts = new Mongo.Collection("texts");
+Dictionary = new Mongo.Collection("dict");
 
 if (Meteor.isClient) {
+  
+  
   // counter starts at 0
   Session.setDefault("counter", 0);
 
@@ -13,6 +16,10 @@ if (Meteor.isClient) {
         return { "text":x };
       })
       .value();
+    },
+    
+    dict: function() {
+      return DictRenderer.render(Dictionary.find({}).fetch());
     }
   });
   
@@ -24,6 +31,23 @@ if (Meteor.isClient) {
         createdAt: new Date()
       });
       event.target.addTextarea.value = "";
+      return false;
+    },
+    
+    "submit #save-word-form": function(event) {
+      var front = event.target.frontTextarea.value;
+      event.target.frontTextarea.value = "";
+      var back = event.target.backTextarea.value;
+      event.target.backTextarea.value = "";
+      
+      if (front.length > 0 && back.length > 0) {
+        Dictionary.insert({
+          front: front,
+          back: back,
+          createdAt: new Date()
+        });
+      }
+      
       return false;
     },
     
