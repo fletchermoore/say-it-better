@@ -5,8 +5,10 @@
 <body>
   <div id="left-column">
 
-    <h1>Say-it-better!</h1>
-
+    <h1>Say-it-better</h1>
+    <div>{{> loginButtons }}</div>
+    
+    {{#if currentUser }}
     <h2>Add Text</h2>
 
     <form id="add-text-form">
@@ -29,9 +31,13 @@
     <div>
       <textarea id="dictTextarea">{{dict}}</textarea>
     </div>
+    
+    {{/if}}
 
+ 
   </div>
   
+ {{#if currentUser}} 
   <div id="save-word-form-container">
     <form id="save-word-form">
       <div><textarea name="frontTextarea" id="frontTextarea"></textarea></div>
@@ -41,12 +47,12 @@
       <div><input type="submit" name="Add Card" id="dictSubmitButton" value="Add/Update"></div>
       
     </form>
+
     
   </div>
 
   <iframe id="dictionary"></iframe>
-
-
+  {{/if}}
 </body>
 
 <!-- confusing names! -->

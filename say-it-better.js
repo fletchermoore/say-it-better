@@ -9,7 +9,7 @@ if (Meteor.isClient) {
 
   Template.body.helpers({
     texts: function () {
-      return _.chain(Texts.find({}).fetch())
+      return _.chain(Texts.find({owner: Meteor.userId()}).fetch())
       .pluck("text")
       .map(_.curry(Linkify.process)(Config.href))
       .map(function (x) {
@@ -19,17 +19,14 @@ if (Meteor.isClient) {
     },
     
     dict: function() {
-      return DictRenderer.render(Dictionary.find({}).fetch());
+      return DictRenderer.render(Dictionary.find({owner: Meteor.userId()}).fetch());
     }
   });
   
   Template.body.events({
     "submit #add-text-form": function(event) {
       var text = event.target.addTextarea.value;
-      Texts.insert({
-        text: text,
-        createdAt: new Date()
-      });
+      Meteor.call("addText", text);
       event.target.addTextarea.value = "";
       return false;
     },
@@ -56,21 +53,44 @@ if (Meteor.isServer) {
   Meteor.startup(function () {
     return Meteor.methods({
       emptyTexts: function() {
-        Texts.remove({});
+        if (! Meteor.userId()) {
+          throw new Meteor.Error("not-authorized: please create an account");
+        }
+        
+        Texts.remove({owner: Meteor.userId()});
+      },
+      
+      addText: function(text) {
+        
+        if (! Meteor.userId()) {
+          throw new Meteor.Error("not-authorized: please create an account");
+        }
+        
+        Texts.insert({
+          text: text,
+          createdAt: new Date(),
+          owner: Meteor.userId()
+        });
       },
       
       addOrUpdate: function(front, back) {
-              if (front.length > 0 && back.length > 0) {
-                Dictionary.update({
-                  front: front
-                }, {
-                  front: front,
-                  back: back,
-                  updatedAt: new Date()
-                }, {
-                  upsert: true
-                });
-              }
+          if (!Meteor.userId()) {
+            throw new Meteor.Error("not-authorized: please create an account");
+          }
+      
+          if (front.length > 0 && back.length > 0) {
+            Dictionary.update({
+              front: front
+            }, {
+              front: front,
+              back: back,
+              updatedAt: new Date(),
+              owner: Meteor.userId()
+            }, {
+              upsert: true
+            });      
+            
+          }
       }
     });
   });
