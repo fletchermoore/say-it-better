@@ -40,13 +40,7 @@ if (Meteor.isClient) {
       var back = event.target.backTextarea.value;
       event.target.backTextarea.value = "";
       
-      if (front.length > 0 && back.length > 0) {
-        Dictionary.insert({
-          front: front,
-          back: back,
-          createdAt: new Date()
-        });
-      }
+      Meteor.call("addOrUpdate", front, back);
       
       return false;
     },
@@ -63,6 +57,20 @@ if (Meteor.isServer) {
     return Meteor.methods({
       emptyTexts: function() {
         Texts.remove({});
+      },
+      
+      addOrUpdate: function(front, back) {
+              if (front.length > 0 && back.length > 0) {
+                Dictionary.update({
+                  front: front
+                }, {
+                  front: front,
+                  back: back,
+                  updatedAt: new Date()
+                }, {
+                  upsert: true
+                });
+              }
       }
     });
   });
