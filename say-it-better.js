@@ -7,8 +7,26 @@ if (Meteor.isClient) {
   // counter starts at 0
   Session.setDefault("counter", 0);
 
-  Template.body.helpers({
-    texts: function () {
+  Template.textListView.helpers({
+    
+    texts: function() {
+      var texts = Texts.find({owner: Meteor.userId()}).fetch();
+      texts = 
+        _.map(texts, function(textObj) {
+          
+          if (textObj.textTitle) {
+            var title = textObj.textTitle;
+          } else {
+            var title = Interface.truncate(textObj.text, Config.textTitleLength);
+          }
+          
+          return { "id": textObj._id, "title": title };
+          
+        });
+      return texts;
+    },
+    
+    textsOld: function () {
       return _.chain(Texts.find({owner: Meteor.userId()}).fetch())
       .pluck("text")
       .map(_.curry(Linkify.process)(Config.href))
@@ -22,6 +40,14 @@ if (Meteor.isClient) {
       return DictRenderer.render(Dictionary.find({owner: Meteor.userId()}).fetch());
     }
   });
+  
+  
+  
+  Template.body.helpers({
+    isPage: function(page) {
+      return Session.equals('view', page);
+    }
+  })
   
   Template.body.events({
     "submit #add-text-form": function(event) {
@@ -45,7 +71,31 @@ if (Meteor.isClient) {
     "click #emptyButton": function(event) {
       Meteor.call("emptyTexts");
       return false;
+    },
+    
+    "click #backToTextListLink": function(event) {
+      Session.set('view', 'text-list')
+      return false;
     }
+  });
+  
+  Template.textListView.events({
+    "click .textTitleLink": function(event) {
+      var id = event.target.getAttribute("data-title-id");
+      Session.set('view', 'text-entry');
+      Session.set('current-text-id', id)
+      return false;
+    }
+  });
+  
+  Template.textEntryView.helpers({
+    textEntry: function() {
+      var textArray = Texts.find({_id: Session.get('current-text-id')}).fetch();
+      var textObj = textArray[0];
+      textObj.text = Linkify.process(Config.href, textObj.text);
+      return textObj;
+    },
+  
   });
 }
 

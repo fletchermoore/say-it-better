@@ -21,7 +21,12 @@
     float: left;
 }
 
-.text-container {
-    margin-top: 20px; 
-    margin-bottom: 20px;
+.textTitleContainer {
+    margin-top: 15px; 
+    margin-bottom: 15px;
+}
+
+div .margined {
+    margin-top: 15px;
+    margin-bottom: 15px;
 }

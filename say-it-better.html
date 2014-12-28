@@ -20,12 +20,12 @@
       </div>
     </form>
 
-    <h2>Texts</h2>
-    <div>
-      <button type="button" id="emptyButton">Empty</button>
-    </div>
+    {{#if isPage 'text-entry' }}
+      {{>textEntryView}}
+    {{else}}
+      {{>textListView}}
+    {{/if}}
 
-    {{#each texts}} {{>text}} {{/each}}
     
     <h2>Dictionary</h2>
     <div>
@@ -34,7 +34,6 @@
     
     {{/if}}
 
- 
   </div>
   
  {{#if currentUser}} 
@@ -47,7 +46,6 @@
       <div><input type="submit" name="Add Card" id="dictSubmitButton" value="Add/Update"></div>
       
     </form>
-
     
   </div>
 
@@ -55,9 +53,28 @@
   {{/if}}
 </body>
 
-<!-- confusing names! -->
-<template name="text">
-  <div class="text-container">
-    {{{text}}}
+
+<template name="textEntryView">
+  <div class="margined">
+    <a href="#" id="backToTextListLink">Text List</a>
   </div>
+  {{#with textEntry}}
+    <div class="textTitle">{{textTitle}}</div>
+    <div>{{{text}}}</div>
+  {{/with}}
+</template>
+
+
+<template name="textListView">
+    <h2>Texts</h2>
+    <div>
+      <button type="button" id="emptyButton">Empty</button>
+    </div>
+    
+    
+    {{#each texts}} 
+      <div class="textTitleContainer">
+        <a href="#" data-title-id="{{ id }}" class="textTitleLink">{{ title }}</a>
+      </div>
+    {{/each}}
 </template>
