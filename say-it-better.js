@@ -36,9 +36,7 @@ if (Meteor.isClient) {
       .value();
     },
     
-    dict: function() {
-      return DictRenderer.render(Dictionary.find({owner: Meteor.userId()}).fetch());
-    }
+    
   });
   
   
@@ -46,6 +44,10 @@ if (Meteor.isClient) {
   Template.body.helpers({
     isPage: function(page) {
       return Session.equals('view', page);
+    },
+    
+    dict: function() {
+      return DictRenderer.render(Dictionary.find({owner: Meteor.userId()}).fetch());
     }
   })
   
@@ -55,6 +57,14 @@ if (Meteor.isClient) {
       Meteor.call("addText", text);
       event.target.addTextarea.value = "";
       return false;
+    },
+    
+    "keyup #frontTextarea": function(event) {
+      var text = event.target.value;
+      var results = Dictionary.find({owner: Meteor.userId(), front: text}).fetch();
+      if (results.length > 0) {
+        document.getElementById('backTextarea').value = results[0].back;
+      }
     },
     
     "submit #save-word-form": function(event) {
