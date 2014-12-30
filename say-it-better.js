@@ -49,7 +49,7 @@ if (Meteor.isClient) {
     dict: function() {
       return DictRenderer.render(Dictionary.find({owner: Meteor.userId()}).fetch());
     }
-  })
+  });
   
   Template.body.events({
     "submit #add-text-form": function(event) {
