@@ -48,6 +48,10 @@ if (Meteor.isClient) {
     
     dict: function() {
       return DictRenderer.render(Dictionary.find({owner: Meteor.userId()}).fetch());
+    },
+    
+    dictCount: function() {
+      return Dictionary.find({owner: Meteor.userId()}).fetch().length;
     }
   });
   
