@@ -30,3 +30,12 @@ div .margined {
     margin-top: 15px;
     margin-bottom: 15px;
 }
+
+#textBodyTextarea {
+    width: 100%;
+    height: 300px;
+}
+
+#textTitleInput {
+    width: 100%;
+}

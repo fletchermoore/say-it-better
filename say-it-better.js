@@ -40,6 +40,16 @@ if (Meteor.isClient) {
   });
   
   
+  Template.textListView.events({
+    "submit #add-text-form": function(event) {
+      var text = event.target.addTextarea.value;
+      Meteor.call("addText", text);
+      event.target.addTextarea.value = "";
+      return false;
+    }
+  });
+  
+  
   
   Template.body.helpers({
     isPage: function(page) {
@@ -56,12 +66,7 @@ if (Meteor.isClient) {
   });
   
   Template.body.events({
-    "submit #add-text-form": function(event) {
-      var text = event.target.addTextarea.value;
-      Meteor.call("addText", text);
-      event.target.addTextarea.value = "";
-      return false;
-    },
+    
     
     "keyup #frontTextarea": function(event) {
       var text = event.target.value;
@@ -111,6 +116,37 @@ if (Meteor.isClient) {
     },
   
   });
+  
+  Template.textEntryView.events({
+    "click #editTextLink": function(event) {
+      Session.set('view', 'text-entry-edit');
+      return false;
+    }
+  });
+  
+  Template.textEntryEditView.helpers({
+    textEntry: function() {
+      var results = Texts.find({_id: Session.get('current-text-id')}).fetch();
+      console.log(results);
+      return results[0];
+    }
+  })
+  
+  Template.textEntryEditView.events({
+    "click #cancelButton": function(event) {
+      Session.set('view', 'text-entry');
+      return false;
+    },
+    
+    "submit #edit-text-form": function(event) {
+      var id = Session.get('current-text-id');
+      var title = event.target.textTitleInput.value;
+      var body = event.target.textBodyTextarea.value;
+      Meteor.call("updateText", id, title, body);
+      Session.set('view', 'text-entry');
+      return false;
+    }
+  })
 }
 
 if (Meteor.isServer) {
@@ -135,6 +171,23 @@ if (Meteor.isServer) {
           createdAt: new Date(),
           owner: Meteor.userId()
         });
+      },
+      
+      updateText: function(id, title, body) {
+        if (! Meteor.userId()) {
+          throw new Meteor.Error("not-authorized: please create an account");
+        }
+        
+        Texts.update({
+          _id: id
+        },
+        {
+          $set: { 
+            textTitle: title,
+            text: body
+          }
+        });
+        
       },
       
       addOrUpdate: function(front, back) {

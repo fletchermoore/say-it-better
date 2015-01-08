@@ -9,22 +9,15 @@
     <div>{{> loginButtons }}</div>
     
     {{#if currentUser }}
-    <h2>Add Text</h2>
 
-    <form id="add-text-form">
-      <div>
-        <textarea name="addTextarea" placeholder="copy paste some spanish here"></textarea>
-      </div>
-      <div>
-        <input type="submit" name="submit-text" value="Add" />
-      </div>
-    </form>
 
     {{#if isPage 'text-entry' }}
       {{>textEntryView}}
+    {{else}} {{#if isPage 'text-entry-edit' }}
+      {{>textEntryEditView}}
     {{else}}
       {{>textListView}}
-    {{/if}}
+    {{/if}} {{/if}}
 
     
     <h2>Dictionary ({{dictCount}})</h2>
@@ -56,7 +49,7 @@
 
 <template name="textEntryView">
   <div class="margined">
-    &lt;&lt; <a href="#" id="backToTextListLink">Text List</a>
+    &lt;&lt; <a href="#" id="backToTextListLink">Text List</a> <a href="#" id="editTextLink">Edit</a>
   </div>
   {{#with textEntry}}
     <div class="textTitle">{{textTitle}}</div>
@@ -66,6 +59,18 @@
 
 
 <template name="textListView">
+    <h2>Add Text</h2>
+
+    <form id="add-text-form">
+      <div>
+        <textarea name="addTextarea" placeholder="copy paste some spanish here"></textarea>
+      </div>
+      <div>
+        <input type="submit" name="submit-text" value="Add" />
+      </div>
+    </form>
+    
+    
     <h2>Texts</h2>
     <div>
       <button type="button" id="emptyButton">Empty</button>
@@ -77,4 +82,29 @@
         <a href="#" data-title-id="{{ id }}" class="textTitleLink">{{ title }}</a>
       </div>
     {{/each}}
+</template>
+
+
+<template name="textEntryEditView">
+  <h2>Edit Text</h2>
+  
+  
+  <form id="edit-text-form">
+    {{#with textEntry}}
+    <div>
+      <input type="text" id="textTitleInput" name="textTitleInput" value="{{textTitle}}">
+    </div>
+    
+    <div>
+      <textarea id="textBodyTextarea" name="textBodyTextarea">{{text}}</textarea>
+    </div>
+    {{/with}}
+    
+    <div>
+      <button type="button" id="cancelButton">Cancel</button> <input type="submit" value="Update">
+    </div>
+    
+  </form>
+  
+  
 </template>
