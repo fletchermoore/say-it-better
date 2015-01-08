@@ -42,9 +42,11 @@ if (Meteor.isClient) {
   
   Template.textListView.events({
     "submit #add-text-form": function(event) {
+      var title = event.target.addTextTitleInput.value;
       var text = event.target.addTextarea.value;
-      Meteor.call("addText", text);
+      Meteor.call("addText", title, text);
       event.target.addTextarea.value = "";
+      event.target.addTextTitleInput.value = "";
       return false;
     }
   });
@@ -160,14 +162,15 @@ if (Meteor.isServer) {
         Texts.remove({owner: Meteor.userId()});
       },
       
-      addText: function(text) {
+      addText: function(title, body) {
         
         if (! Meteor.userId()) {
           throw new Meteor.Error("not-authorized: please create an account");
         }
         
         Texts.insert({
-          text: text,
+          textTitle: title,
+          text: body,
           createdAt: new Date(),
           owner: Meteor.userId()
         });
