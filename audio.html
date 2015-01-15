@@ -1,0 +1,20 @@
+<template name="audio">
+    
+    <hr/>
+    
+    <form>
+        <div>
+            <label>Add Audio Link:</label>
+            <input type="text">
+            <input type="submit" value="WGET">
+        </div>
+    </form>
+    
+    <div>
+        <audio id="audioElement" src="AbsoluteBegReading1-Presentandose1.mp3"></audio>
+    </div>
+    
+    <div id="audioWaveform"></div>
+    
+    {{loadWaveform}}
+</template>
