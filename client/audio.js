@@ -73,5 +73,11 @@ Template.audio.helpers({
         }
         
         return 'fail.mp3';
+    },
+    
+    audioFile: function() {
+        var entryId = Session.get('current-text-id');
+        var entry = Texts.findOne({_id: entryId});
+        return Audio.findOne({_id: entry.audio});
     }
 })

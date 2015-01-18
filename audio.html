@@ -2,19 +2,35 @@
     
     <hr/>
     
-    <form id="addAudioForm">
-        <div>
+    
+    
+    
+    {{#with audioFile}}
+        {{#unless this.isUploaded}}
+          {{> FS.UploadProgressBar}}
+        {{ else }}
+        
+          {{#FS.DeleteButton class="none" }} Delete Audio {{/FS.DeleteButton}}
+          <div>
+            <audio id="audioElement" src="{{this.url}}"></audio>
+          </div>
+          <div id="audioWaveform"></div>
+          {{deferWaveform}}
+        
+        {{/unless}}
+        
+      {{else}}
+        
+        <form id="addAudioForm">
+          <div>
             <label>Add Audio Link:</label>
             <input type="file" id="audioFileInput" name="audioFileInput">
             <input type="submit" value="Upload">
-        </div>
-    </form>
+          </div>
+        </form>
     
-    <div>
-        <audio id="audioElement" src="{{audioUrl}}"></audio>
-    </div>
+    {{/with}}
     
-    <div id="audioWaveform"></div>
     
-    {{deferWaveform}}
+    
 </template>

@@ -10,3 +10,4 @@ accounts-password
 cfs:standard-packages
 cfs:filesystem
 cfs:ejson-file
+cfs:ui
