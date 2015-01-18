@@ -53,6 +53,10 @@
   </div>
   {{#with textEntry}}
     <div class="textTitle">{{textTitle}}</div>
+    <div>{{#if lastStudied}}
+      Last Studied: <span id="lastStudiedValue">{{lastStudied}}</span> 
+      {{/if}}
+      <button id="markStudiedButton">Record Study</button></div>
     <div>{{{text}}}</div>
   {{/with}}
   
@@ -85,7 +89,8 @@
     
     {{#each texts}} 
       <div class="textTitleContainer">
-        <a href="#" data-title-id="{{ id }}" class="textTitleLink">{{ title }}</a>
+        {{#if lastStudied}}{{lastStudied}}{{/if}}<a href="#" data-title-id="{{ id }}" class="textTitleLink">{{ title }}</a>
+      
       </div>
     {{/each}}
 </template>

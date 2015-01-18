@@ -39,3 +39,7 @@ div .margined {
 #textTitleInput {
     width: 100%;
 }
+
+.textTitle {
+    font-weight: bold;
+}

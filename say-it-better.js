@@ -22,7 +22,7 @@ if (Meteor.isClient) {
   Template.textListView.helpers({
     
     texts: function() {
-      var texts = Texts.find({owner: Meteor.userId()}).fetch();
+      var texts = Texts.find({owner: Meteor.userId()}, {sort: { lastStudied: 1}}).fetch();
       texts = 
         _.map(texts, function(textObj) {
           
@@ -32,7 +32,13 @@ if (Meteor.isClient) {
             var title = Interface.truncate(textObj.text, Config.textTitleLength);
           }
           
-          return { "id": textObj._id, "title": title };
+          if (textObj.lastStudied) {
+            var time = textObj.lastStudied
+          } else {
+            var time = "(NEW)";
+          }
+          
+          return { "id": textObj._id, "title": title, "lastStudied": time };
           
         });
       return texts;
@@ -135,6 +141,14 @@ if (Meteor.isClient) {
     "click #editTextLink": function(event) {
       Session.set('view', 'text-entry-edit');
       return false;
+    },
+    
+    "click #markStudiedButton": function(event) {
+      Meteor.call('updateLastStudied', Session.get('current-text-id'), function(err, time) {
+        document.getElementById('lastStudiedValue').text = time;
+      })
+      
+      
     }
   });
   
@@ -203,6 +217,15 @@ if (Meteor.isServer) {
           }
         });
         
+      },
+      
+      updateLastStudied: function(id) {
+        var time = new Date();
+        Texts.update({_id: id},
+        {$set: {
+          lastStudied: time
+        }});
+        return time;
       },
       
       attachAudio: function(id, audio) {

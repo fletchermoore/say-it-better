@@ -10,7 +10,8 @@ AudioInterface = {
             wavesurfer.init({
                 container: document.querySelector('#audioWaveform'),
                 waveColor: 'violet',
-                progressColor: 'purple'
+                progressColor: 'purple',
+                scrollParent: true
             });
 
             wavesurfer.on('ready', function() {
