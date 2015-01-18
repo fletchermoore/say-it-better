@@ -1,6 +1,18 @@
 Texts = new Mongo.Collection("texts");
 Dictionary = new Mongo.Collection("dict");
 
+//FS.HTTP.setBaseUrl('/public/uploads');
+
+Audio = new FS.Collection("audio", {
+  stores: [new FS.Store.FileSystem("audio")]
+});
+
+Audio.allow({
+    insert: function() { return true; },
+    update: function() { return true; },
+    download: function() { return true; }
+});
+
 if (Meteor.isClient) {
   
   
@@ -191,6 +203,25 @@ if (Meteor.isServer) {
           }
         });
         
+      },
+      
+      attachAudio: function(id, audio) {
+        if (! Meteor.userId()) {
+          throw new Meteor.Error("not-authorized: please create an account");
+        }
+        
+        console.log('attaching audio')
+        console.log(id)
+        console.log(audio)
+        
+        Texts.update({
+          _id: id
+        },
+        {
+          $set: {
+            audio: audio._id
+          }
+        });
       },
       
       addOrUpdate: function(front, back) {

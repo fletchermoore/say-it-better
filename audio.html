@@ -2,19 +2,19 @@
     
     <hr/>
     
-    <form>
+    <form id="addAudioForm">
         <div>
             <label>Add Audio Link:</label>
-            <input type="text">
-            <input type="submit" value="WGET">
+            <input type="file" id="audioFileInput" name="audioFileInput">
+            <input type="submit" value="Upload">
         </div>
     </form>
     
     <div>
-        <audio id="audioElement" src="AbsoluteBegReading1-Presentandose1.mp3"></audio>
+        <audio id="audioElement" src="{{audioUrl}}"></audio>
     </div>
     
     <div id="audioWaveform"></div>
     
-    {{loadWaveform}}
+    {{deferWaveform}}
 </template>

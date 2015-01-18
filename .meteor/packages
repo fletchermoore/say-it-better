@@ -7,3 +7,6 @@ meteor-platform
 autopublish
 accounts-ui
 accounts-password
+cfs:standard-packages
+cfs:filesystem
+cfs:ejson-file
