@@ -2,6 +2,9 @@
     
     {{#if hasAccessToken}}
       <div>Connected to Dropbox</div>
+      <div>
+          <button id="exportButton">Export to Dropbox</button>
+      </div>
     {{else}}
     <div>
       <a href="https://www.dropbox.com/1/oauth2/authorize?client_id=or1uugf9sgr0mdn&response_type=code"

@@ -19,6 +19,7 @@
 #left-column {
     width: 45%;
     float: left;
+    padding-bottom: 30px;
 }
 
 .textTitleContainer {
