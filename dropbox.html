@@ -1,0 +1,15 @@
+<template name="dropboxLogin">
+    
+    {{#if hasAccessToken}}
+      <div>Connected to Dropbox</div>
+    {{else}}
+    <div>
+      <a href="https://www.dropbox.com/1/oauth2/authorize?client_id=or1uugf9sgr0mdn&response_type=code"
+        target="_blank">Connect to Dropbox</a>
+      <form id="dropboxAuthForm">
+        <input type="text" id="dropboxCodeInput" placeholder="paste code here"/>
+        <input type="submit" value="Activate"/>
+      </form>
+    </div>
+    {{/if}}
+</template>

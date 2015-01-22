@@ -1,14 +1,20 @@
 AudioInterface = {
+    
     updateAudioTag: function(newSrc) {
         var audioElem = document.getElementById('audioElement');
         audioElem.src = newSrc;
     },
     
     loadWaveform: function() {
+        var container = document.getElementById('audioWaveform');
+        
+        if (container.innerHTML == '') {
+            console.log('load waveform called')
+        
             var wavesurfer = Object.create(WaveSurfer);
 
             wavesurfer.init({
-                container: document.querySelector('#audioWaveform'),
+                container: container,
                 waveColor: 'violet',
                 progressColor: 'purple',
                 scrollParent: true
@@ -24,8 +30,10 @@ AudioInterface = {
             
 
             var audioElem = document.getElementById('audioElement');
-            console.log(audioElem.src);
+            
             wavesurfer.load(audioElem.src);
+            
+        }
     }
 }
 

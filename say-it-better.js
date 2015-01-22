@@ -116,7 +116,35 @@ if (Meteor.isClient) {
     "click #backToTextListLink": function(event) {
       Session.set('view', 'text-list')
       return false;
-    }
+    },
+    
+   "submit #dropboxAuthForm": function(event) {
+     
+      var input = document.getElementById('dropboxCodeInput')
+      var code = input.value;
+      var href = "https://api.dropbox.com/1/oauth2/token"
+      console.log('form submitted!')
+     
+      Meteor.http.post(href, { params: {
+        'code': code,
+        'grant_type': 'authorization_code',
+        'client_id': Config.dropbox_id,
+        'client_secret': Config.dropbox_secret
+      },
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded'
+      }
+      }, function(error, response) {
+        if (!error) {
+          Meteor.call('connectDropbox', response.data);  
+        } else {console.log(error);}
+      });
+      
+      input.value="";
+      
+      return false;
+   }
+    
   });
   
   Template.textListView.events({
@@ -188,6 +216,25 @@ if (Meteor.isServer) {
         
         Texts.remove({owner: Meteor.userId()});
       },
+      
+      connectDropbox: function(responseData) {
+        if (! Meteor.userId()) {
+          throw new Meteor.Error("not-authorized: please create an account");
+        }
+        
+        console.log(responseData);
+        console.log(responseData.access_token);
+        
+        Meteor.users.update({_id: Meteor.userId()},
+        { $set: {
+          'profile.dropboxToken': responseData.access_token,
+          'profile.dropboxUid': responseData.uid
+        }
+          
+        });
+      },
+      
+      
       
       addText: function(title, body) {
         
